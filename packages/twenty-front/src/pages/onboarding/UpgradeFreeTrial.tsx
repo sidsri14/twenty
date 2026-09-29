@@ -13,7 +13,6 @@ import { StyledOnboardingStepPage } from '@/onboarding/components/StyledOnboardi
 import { StyledOnboardingStepSubtitle } from '@/onboarding/components/StyledOnboardingStepSubtitle';
 import { StyledOnboardingStepTitle } from '@/onboarding/components/StyledOnboardingStepTitle';
 import { OnboardingPlanCard } from '@/onboarding/components/upgrade-free-trial/OnboardingPlanCard';
-import { OnboardingTrialExtensionTag } from '@/onboarding/components/upgrade-free-trial/OnboardingTrialExtensionTag';
 import { CAL_LINK } from '@/onboarding/constants/CalLink';
 import { OnboardingPlanTag } from '@/onboarding/components/upgrade-free-trial/OnboardingPlanTag';
 import { useSetOnboardingUpgradeTrialFreeCredits } from '@/onboarding/hooks/useSetOnboardingUpgradeTrialFreeCredits';
@@ -40,9 +39,6 @@ import { Loader } from 'twenty-ui/primitives/feedback';
 import { RadioGroup } from 'twenty-ui/primitives/input';
 import { ClickToActionLink } from 'twenty-ui/primitives/navigation';
 import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
-import { HorizontalSeparator } from 'twenty-ui/primitives/layout';
-import { CAL_LINK, ClickToActionLink } from 'twenty-ui/primitives/navigation';
-import { themeCssVariables } from 'twenty-ui/theme';
 import {
   type Billing,
   type BillingPlanKey,
