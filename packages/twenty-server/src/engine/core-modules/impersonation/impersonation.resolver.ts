@@ -38,7 +38,12 @@ export class ImpersonationResolver {
   constructor(private readonly impersonationService: ImpersonationService) {}
 
   @UseGuards(
-    CallerGuard({ userSession: { impersonation: false } }),
+    CallerGuard({
+      userSession: { impersonation: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     ImpersonatePermissionGuard,
     CustomPermissionGuard,
   )
@@ -61,7 +66,15 @@ export class ImpersonationResolver {
     );
   }
 
-  @UseGuards(CallerGuard({ userSession: true }), NoPermissionGuard)
+  @UseGuards(
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
+    NoPermissionGuard,
+  )
   @Mutation(() => StopImpersonationDTO)
   @AllowSuspendedWorkspace()
   async stopImpersonation(

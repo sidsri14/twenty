@@ -95,6 +95,7 @@ export class BillingResolver {
   @UseGuards(
     CallerGuard({
       userSession: true,
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),
@@ -165,6 +166,7 @@ export class BillingResolver {
   @UseGuards(
     CallerGuard({
       userSession: true,
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),

@@ -592,6 +592,7 @@ export class AuthResolver {
   @UseGuards(
     CallerGuard({
       userSession: { workspaceAgnostic: true },
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),
@@ -607,6 +608,7 @@ export class AuthResolver {
   @UseGuards(
     CallerGuard({
       userSession: { workspaceAgnostic: true },
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),
@@ -624,7 +626,12 @@ export class AuthResolver {
 
   @Mutation(() => SignUpDTO)
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   @AllowSuspendedWorkspace()
@@ -670,6 +677,7 @@ export class AuthResolver {
   @UseGuards(
     CallerGuard({
       userSession: { workspaceAgnostic: true },
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),
@@ -706,6 +714,7 @@ export class AuthResolver {
   @UseGuards(
     CallerGuard({
       userSession: { workspaceAgnostic: true },
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),
@@ -740,6 +749,7 @@ export class AuthResolver {
   @UseGuards(
     CallerGuard({
       userSession: { workspaceAgnostic: true },
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),
@@ -768,7 +778,12 @@ export class AuthResolver {
 
   @Mutation(() => TransientTokenDTO)
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async generateTransientToken(
@@ -1055,7 +1070,12 @@ export class AuthResolver {
 
   @Mutation(() => AuthorizeAppDTO)
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async authorizeApp(
@@ -1122,7 +1142,12 @@ export class AuthResolver {
   }
 
   @UseGuards(
-    CallerGuard({ userSession: { playground: false } }),
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     SettingsPermissionGuard(PermissionFlagType.API_KEYS_AND_WEBHOOKS),
   )
   @Mutation(() => ApiKeyToken)
@@ -1138,7 +1163,12 @@ export class AuthResolver {
   }
 
   @UseGuards(
-    CallerGuard({ userSession: { playground: false } }),
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     SettingsPermissionGuard(PermissionFlagType.API_KEYS_AND_WEBHOOKS),
   )
   @Mutation(() => AuthToken)

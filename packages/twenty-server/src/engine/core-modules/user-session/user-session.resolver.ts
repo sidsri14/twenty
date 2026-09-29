@@ -34,7 +34,12 @@ export class UserSessionResolver {
 
   @Query(() => [UserSessionDTO])
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async currentUserSessions(
@@ -69,7 +74,12 @@ export class UserSessionResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async revokeUserSession(
@@ -142,7 +152,12 @@ export class UserSessionResolver {
 
   @Mutation(() => Int)
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async revokeAllOtherUserSessions(

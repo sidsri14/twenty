@@ -33,7 +33,12 @@ import { SettingsPermissionGuard } from 'src/engine/guards/settings-permission.g
   PreventNestToAutoLogGraphqlErrorsFilter,
 )
 @UseGuards(
-  CallerGuard({ userSession: true }),
+  CallerGuard({
+    userSession: true,
+    apiKey: false,
+    oauthClient: false,
+    application: false,
+  }),
   SettingsPermissionGuard(PermissionFlagType.SECURITY),
   AdminPanelGuard,
 )

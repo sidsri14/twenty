@@ -102,7 +102,12 @@ export class TwoFactorAuthenticationResolver {
 
   @Mutation(() => InitiateTwoFactorAuthenticationProvisioningDTO)
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async initiateOTPProvisioningForAuthenticatedUser(
@@ -128,7 +133,15 @@ export class TwoFactorAuthenticationResolver {
   }
 
   @Mutation(() => DeleteTwoFactorAuthenticationMethodDTO)
-  @UseGuards(CallerGuard({ userSession: true }), CustomPermissionGuard)
+  @UseGuards(
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
+    CustomPermissionGuard,
+  )
   async deleteTwoFactorAuthenticationMethod(
     @Args()
     deleteTwoFactorAuthenticationMethodInput: DeleteTwoFactorAuthenticationMethodInput,
@@ -165,7 +178,15 @@ export class TwoFactorAuthenticationResolver {
   }
 
   @Mutation(() => VerifyTwoFactorAuthenticationMethodDTO)
-  @UseGuards(CallerGuard({ userSession: true }), NoPermissionGuard)
+  @UseGuards(
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
+    NoPermissionGuard,
+  )
   async verifyTwoFactorAuthenticationMethodForAuthenticatedUser(
     @Args()
     verifyTwoFactorAuthenticationMethodInput: VerifyTwoFactorAuthenticationMethodInput,

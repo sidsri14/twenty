@@ -31,7 +31,14 @@ const SERVER_BINDING_REJECTION_CODES: EnterpriseExceptionCode[] = [
 ];
 
 @Resolver()
-@UseGuards(CallerGuard({ userSession: { workspaceAgnostic: true } }))
+@UseGuards(
+  CallerGuard({
+    userSession: { workspaceAgnostic: true },
+    apiKey: false,
+    oauthClient: false,
+    application: false,
+  }),
+)
 @UsePipes(ResolverValidationPipe)
 @UseFilters(EnterpriseExceptionFilter, PreventNestToAutoLogGraphqlErrorsFilter)
 export class EnterpriseResolver {
@@ -59,7 +66,12 @@ export class EnterpriseResolver {
 
   @Query(() => String, { nullable: true })
   @UseGuards(
-    CallerGuard({ userSession: true }),
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     BillingDisabledGuard,
     AdminPanelGuard,
     NoPermissionGuard,
@@ -73,7 +85,12 @@ export class EnterpriseResolver {
 
   @Query(() => String, { nullable: true })
   @UseGuards(
-    CallerGuard({ userSession: true }),
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     BillingDisabledGuard,
     AdminPanelGuard,
     NoPermissionGuard,
@@ -90,7 +107,12 @@ export class EnterpriseResolver {
 
   @Query(() => EnterpriseSubscriptionStatusDTO, { nullable: true })
   @UseGuards(
-    CallerGuard({ userSession: true }),
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     BillingDisabledGuard,
     AdminPanelGuard,
     NoPermissionGuard,
@@ -101,7 +123,12 @@ export class EnterpriseResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(
-    CallerGuard({ userSession: true }),
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     BillingDisabledGuard,
     AdminPanelGuard,
     NoPermissionGuard,
@@ -116,7 +143,12 @@ export class EnterpriseResolver {
 
   @Mutation(() => EnterpriseLicenseInfoDTO)
   @UseGuards(
-    CallerGuard({ userSession: true }),
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     BillingDisabledGuard,
     AdminPanelGuard,
     NoPermissionGuard,
@@ -135,7 +167,12 @@ export class EnterpriseResolver {
 
   @Mutation(() => EnterpriseLicenseInfoDTO)
   @UseGuards(
-    CallerGuard({ userSession: true }),
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     BillingDisabledGuard,
     AdminPanelGuard,
     NoPermissionGuard,

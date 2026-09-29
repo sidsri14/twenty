@@ -24,6 +24,7 @@ registerEnumType(RecordShareAccessLevel, { name: 'RecordShareAccessLevel' });
 @UseGuards(
   CallerGuard({
     userSession: true,
+    apiKey: false,
     oauthClient: { requireUser: true },
     application: { requireUser: true },
   }),

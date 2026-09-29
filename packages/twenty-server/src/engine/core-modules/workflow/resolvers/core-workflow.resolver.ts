@@ -53,7 +53,12 @@ import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-module
 @CoreResolver()
 @UsePipes(ResolverValidationPipe)
 @UseGuards(
-  CallerGuard({ userSession: true, oauthClient: true, application: true }),
+  CallerGuard({
+    userSession: true,
+    apiKey: false,
+    oauthClient: true,
+    application: true,
+  }),
   SettingsPermissionGuard(PermissionFlagType.WORKFLOWS),
 )
 @UseFilters(

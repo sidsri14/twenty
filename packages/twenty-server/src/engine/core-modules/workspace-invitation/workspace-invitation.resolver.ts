@@ -61,6 +61,7 @@ export class WorkspaceInvitationResolver {
   @UseGuards(
     CallerGuard({
       userSession: true,
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),
@@ -103,6 +104,7 @@ export class WorkspaceInvitationResolver {
   @UseGuards(
     CallerGuard({
       userSession: true,
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),

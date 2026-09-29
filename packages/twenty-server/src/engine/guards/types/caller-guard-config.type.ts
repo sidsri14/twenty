@@ -8,10 +8,11 @@ export type ApplicationCallerOptions = {
   requireUser: true;
 };
 
-// A caller kind left out is refused.
+// Every key is required so each endpoint writes down a decision per caller
+// kind, and a kind added later does not compile until every endpoint has one.
 export type CallerGuardConfig = {
-  userSession?: true | UserSessionCallerOptions;
-  apiKey?: true;
-  oauthClient?: true | ApplicationCallerOptions;
-  application?: true | ApplicationCallerOptions;
+  userSession: boolean | UserSessionCallerOptions;
+  apiKey: boolean;
+  oauthClient: boolean | ApplicationCallerOptions;
+  application: boolean | ApplicationCallerOptions;
 };

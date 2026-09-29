@@ -71,7 +71,15 @@ class GetTimelineCalendarEventsFromOpportunityIdArgs {
   pageSize: number;
 }
 
-@UseGuards(CallerGuard({ userSession: true }), CustomPermissionGuard)
+@UseGuards(
+  CallerGuard({
+    userSession: true,
+    apiKey: false,
+    oauthClient: false,
+    application: false,
+  }),
+  CustomPermissionGuard,
+)
 @CoreResolver(() => TimelineCalendarEventsWithTotalDTO)
 @UseFilters(AuthGraphqlApiExceptionFilter)
 export class TimelineCalendarEventResolver {

@@ -79,7 +79,12 @@ export class ApiKeyController {
   // Creating a key assigns it a role, so it also requires ROLES to prevent
   // binding a role above the caller's own.
   @UseGuards(
-    CallerGuard({ userSession: { playground: false } }),
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     SettingsPermissionGuard(PermissionFlagType.ROLES),
   )
   @Post()
@@ -98,7 +103,14 @@ export class ApiKeyController {
     });
   }
 
-  @UseGuards(CallerGuard({ userSession: { playground: false } }))
+  @UseGuards(
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
+  )
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -120,7 +132,14 @@ export class ApiKeyController {
     return this.apiKeyService.update(id, workspace.id, updateData);
   }
 
-  @UseGuards(CallerGuard({ userSession: { playground: false } }))
+  @UseGuards(
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
+  )
   @Delete(':id')
   async remove(
     @Param('id') id: string,

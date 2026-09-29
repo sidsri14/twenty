@@ -18,7 +18,14 @@ import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorat
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { CallerGuard } from 'src/engine/guards/caller.guard';
 
-@UseGuards(CallerGuard({ userSession: true }))
+@UseGuards(
+  CallerGuard({
+    userSession: true,
+    apiKey: false,
+    oauthClient: false,
+    application: false,
+  }),
+)
 @UsePipes(ResolverValidationPipe)
 @UseFilters(
   PreventNestToAutoLogGraphqlErrorsFilter,

@@ -202,6 +202,7 @@ export class FileController {
     JwtAuthGuard,
     CallerGuard({
       userSession: true,
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),

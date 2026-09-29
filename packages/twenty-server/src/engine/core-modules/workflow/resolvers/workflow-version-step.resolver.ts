@@ -41,6 +41,7 @@ import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filt
 @UseGuards(
   CallerGuard({
     userSession: true,
+    apiKey: false,
     oauthClient: { requireUser: true },
     application: { requireUser: true },
   }),

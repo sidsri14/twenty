@@ -77,7 +77,12 @@ export class ApiKeyResolver {
   // binding a role above the caller's own. Refusing playground sessions blocks
   // minting from derived PLAYGROUND tokens.
   @UseGuards(
-    CallerGuard({ userSession: { playground: false } }),
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     SettingsPermissionGuard(PermissionFlagType.ROLES),
   )
   @Mutation(() => ApiKeyEntity)
@@ -94,7 +99,14 @@ export class ApiKeyResolver {
     });
   }
 
-  @UseGuards(CallerGuard({ userSession: { playground: false } }))
+  @UseGuards(
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
+  )
   @Mutation(() => ApiKeyEntity, { nullable: true })
   async updateApiKey(
     @AuthWorkspace() workspace: WorkspaceEntity,
@@ -121,7 +133,14 @@ export class ApiKeyResolver {
     }
   }
 
-  @UseGuards(CallerGuard({ userSession: { playground: false } }))
+  @UseGuards(
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
+  )
   @Mutation(() => ApiKeyEntity, { nullable: true })
   async revokeApiKey(
     @AuthWorkspace() workspace: WorkspaceEntity,
@@ -132,7 +151,12 @@ export class ApiKeyResolver {
 
   // Binding a role to an API key requires ROLES to prevent privilege escalation.
   @UseGuards(
-    CallerGuard({ userSession: { playground: false } }),
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     SettingsPermissionGuard(PermissionFlagType.ROLES),
   )
   @Mutation(() => Boolean)

@@ -125,7 +125,15 @@ export class WorkspaceResolver {
   }
 
   @Mutation(() => WorkspaceEntity)
-  @UseGuards(CallerGuard({ userSession: true }), NoPermissionGuard)
+  @UseGuards(
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
+    NoPermissionGuard,
+  )
   async activateWorkspace(
     // Deprecated: the workspace name is set at creation. This argument is kept
     // for backward compatibility (removing it would be a breaking schema change)

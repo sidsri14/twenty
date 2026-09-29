@@ -136,6 +136,7 @@ export class UserResolver {
   @UseGuards(
     CallerGuard({
       userSession: { workspaceAgnostic: true },
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),
@@ -403,7 +404,12 @@ export class UserResolver {
 
   @Mutation(() => UserEntity)
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   @AllowSuspendedWorkspace()
@@ -415,6 +421,7 @@ export class UserResolver {
   @UseGuards(
     CallerGuard({
       userSession: { workspaceAgnostic: true },
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),
@@ -747,7 +754,12 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(
-    CallerGuard({ userSession: true }),
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     SettingsPermissionGuard(PermissionFlagType.PROFILE_INFORMATION),
   )
   async updateUserEmail(

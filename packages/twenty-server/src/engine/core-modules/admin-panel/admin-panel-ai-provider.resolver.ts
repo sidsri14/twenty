@@ -30,7 +30,12 @@ import { ModelsDevCatalogService } from 'src/engine/metadata-modules/ai/ai-model
   ConfigVariableGraphqlApiExceptionFilter,
 )
 @UseGuards(
-  CallerGuard({ userSession: true }),
+  CallerGuard({
+    userSession: true,
+    apiKey: false,
+    oauthClient: false,
+    application: false,
+  }),
   SettingsPermissionGuard(PermissionFlagType.SECURITY),
 )
 export class AdminPanelAiProviderResolver {

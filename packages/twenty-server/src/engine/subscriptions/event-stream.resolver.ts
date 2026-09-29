@@ -47,6 +47,7 @@ import { wrapAsyncIteratorWithLifecycle } from 'src/engine/subscriptions/utils/w
 @UseGuards(
   CallerGuard({
     userSession: true,
+    apiKey: false,
     oauthClient: { requireUser: true },
     application: { requireUser: true },
   }),

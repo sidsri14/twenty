@@ -28,6 +28,7 @@ import { AiGraphqlApiExceptionInterceptor } from 'src/engine/metadata-modules/ai
 @UseGuards(
   CallerGuard({
     userSession: true,
+    apiKey: false,
     oauthClient: { requireUser: true },
     application: { requireUser: true },
   }),

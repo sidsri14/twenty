@@ -91,33 +91,63 @@ const CONFIG_CASES: {
   acceptedCallerVariants: CallerVariant[];
 }[] = [
   {
-    name: 'no caller kind',
-    callerGuardConfig: {},
+    name: 'every caller kind refused',
+    callerGuardConfig: {
+      userSession: false,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    },
     acceptedCallerVariants: [],
   },
   {
     name: 'userSession',
-    callerGuardConfig: { userSession: true },
+    callerGuardConfig: {
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    },
     acceptedCallerVariants: USER_SESSION_VARIANTS,
   },
   {
     name: 'userSession with default options',
-    callerGuardConfig: { userSession: {} },
+    callerGuardConfig: {
+      userSession: {},
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    },
     acceptedCallerVariants: USER_SESSION_VARIANTS,
   },
   {
     name: 'userSession without impersonation',
-    callerGuardConfig: { userSession: { impersonation: false } },
+    callerGuardConfig: {
+      userSession: { impersonation: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    },
     acceptedCallerVariants: ['session', 'playgroundSession'],
   },
   {
     name: 'userSession without playground',
-    callerGuardConfig: { userSession: { playground: false } },
+    callerGuardConfig: {
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    },
     acceptedCallerVariants: ['session', 'impersonatedSession'],
   },
   {
     name: 'userSession with workspace-agnostic',
-    callerGuardConfig: { userSession: { workspaceAgnostic: true } },
+    callerGuardConfig: {
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    },
     acceptedCallerVariants: [
       ...USER_SESSION_VARIANTS,
       'workspaceAgnosticSession',
@@ -131,32 +161,74 @@ const CONFIG_CASES: {
         playground: false,
         workspaceAgnostic: true,
       },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
     },
     acceptedCallerVariants: ['session', 'workspaceAgnosticSession'],
   },
   {
+    name: 'userSession with every option written as the default',
+    callerGuardConfig: {
+      userSession: {
+        impersonation: true,
+        playground: true,
+        workspaceAgnostic: false,
+      },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    },
+    acceptedCallerVariants: USER_SESSION_VARIANTS,
+  },
+  {
     name: 'apiKey',
-    callerGuardConfig: { apiKey: true },
+    callerGuardConfig: {
+      userSession: false,
+      apiKey: true,
+      oauthClient: false,
+      application: false,
+    },
     acceptedCallerVariants: ['apiKey'],
   },
   {
     name: 'oauthClient',
-    callerGuardConfig: { oauthClient: true },
+    callerGuardConfig: {
+      userSession: false,
+      apiKey: false,
+      oauthClient: true,
+      application: false,
+    },
     acceptedCallerVariants: ['oauthClientWithUser', 'oauthClientWithoutUser'],
   },
   {
     name: 'oauthClient requiring a user',
-    callerGuardConfig: { oauthClient: { requireUser: true } },
+    callerGuardConfig: {
+      userSession: false,
+      apiKey: false,
+      oauthClient: { requireUser: true },
+      application: false,
+    },
     acceptedCallerVariants: ['oauthClientWithUser'],
   },
   {
     name: 'application',
-    callerGuardConfig: { application: true },
+    callerGuardConfig: {
+      userSession: false,
+      apiKey: false,
+      oauthClient: false,
+      application: true,
+    },
     acceptedCallerVariants: ['applicationWithUser', 'applicationWithoutUser'],
   },
   {
     name: 'application requiring a user',
-    callerGuardConfig: { application: { requireUser: true } },
+    callerGuardConfig: {
+      userSession: false,
+      apiKey: false,
+      oauthClient: false,
+      application: { requireUser: true },
+    },
     acceptedCallerVariants: ['applicationWithUser'],
   },
   {
@@ -175,6 +247,7 @@ const CONFIG_CASES: {
     name: 'user-bound callers',
     callerGuardConfig: {
       userSession: { workspaceAgnostic: true },
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     },
@@ -189,6 +262,7 @@ const CONFIG_CASES: {
     name: 'users and applications',
     callerGuardConfig: {
       userSession: { workspaceAgnostic: true },
+      apiKey: false,
       oauthClient: true,
       application: true,
     },
@@ -252,7 +326,12 @@ describe('CallerGuard', () => {
   ])('should refuse a user carried by $name', ({ tokenType }) => {
     expect(
       canActivateOverHttp(
-        { userSession: { workspaceAgnostic: true } },
+        {
+          userSession: { workspaceAgnostic: true },
+          apiKey: false,
+          oauthClient: false,
+          application: false,
+        },
         { user, workspace, tokenType },
       ),
     ).toBe(false);
@@ -267,18 +346,41 @@ describe('CallerGuard', () => {
     };
 
     expect(
-      canActivateOverHttp({ userSession: { impersonation: false } }, request),
+      canActivateOverHttp(
+        {
+          userSession: { impersonation: false },
+          apiKey: false,
+          oauthClient: false,
+          application: false,
+        },
+        request,
+      ),
     ).toBe(true);
   });
 
   it('should refuse when there is no request on the context', () => {
-    expect(canActivateOverHttp({ userSession: true }, undefined)).toBe(false);
+    expect(
+      canActivateOverHttp(
+        {
+          userSession: true,
+          apiKey: false,
+          oauthClient: false,
+          application: false,
+        },
+        undefined,
+      ),
+    ).toBe(false);
   });
 
   describe('over GraphQL', () => {
     it('should let an accepted caller through', async () => {
       const result = await runGuardedQuery({
-        guard: CallerGuard({ userSession: true }),
+        guard: CallerGuard({
+          userSession: true,
+          apiKey: false,
+          oauthClient: false,
+          application: false,
+        }),
         request: REQUEST_BY_CALLER_VARIANT.session,
       });
 
@@ -288,7 +390,12 @@ describe('CallerGuard', () => {
 
     it('should refuse with a ForbiddenException', async () => {
       const result = await runGuardedQuery({
-        guard: CallerGuard({ userSession: true }),
+        guard: CallerGuard({
+          userSession: true,
+          apiKey: false,
+          oauthClient: false,
+          application: false,
+        }),
         request: REQUEST_BY_CALLER_VARIANT.apiKey,
       });
 
@@ -301,7 +408,12 @@ describe('CallerGuard', () => {
 
     it('should report a credential-less request as UNAUTHENTICATED', async () => {
       const result = await runGuardedQuery({
-        guard: CallerGuard({ userSession: true }),
+        guard: CallerGuard({
+          userSession: true,
+          apiKey: false,
+          oauthClient: false,
+          application: false,
+        }),
         request: { workspace },
       });
 
@@ -314,7 +426,12 @@ describe('CallerGuard', () => {
   describe('over REST', () => {
     it('should let an accepted caller through', async () => {
       const response = await runGuardedRestRequest({
-        guard: CallerGuard({ apiKey: true }),
+        guard: CallerGuard({
+          userSession: false,
+          apiKey: true,
+          oauthClient: false,
+          application: false,
+        }),
         request: REQUEST_BY_CALLER_VARIANT.apiKey,
       });
 
@@ -324,7 +441,12 @@ describe('CallerGuard', () => {
 
     it('should refuse with a 403', async () => {
       const response = await runGuardedRestRequest({
-        guard: CallerGuard({ userSession: true }),
+        guard: CallerGuard({
+          userSession: true,
+          apiKey: false,
+          oauthClient: false,
+          application: false,
+        }),
         request: REQUEST_BY_CALLER_VARIANT.apiKey,
       });
 
@@ -334,7 +456,12 @@ describe('CallerGuard', () => {
 
     it('should refuse a credential-less request with a 403', async () => {
       const response = await runGuardedRestRequest({
-        guard: CallerGuard({ userSession: true }),
+        guard: CallerGuard({
+          userSession: true,
+          apiKey: false,
+          oauthClient: false,
+          application: false,
+        }),
         request: {},
       });
 

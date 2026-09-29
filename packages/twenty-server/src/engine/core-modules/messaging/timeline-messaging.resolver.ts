@@ -77,7 +77,15 @@ class GetTimelineThreadsFromOpportunityIdArgs {
   pageSize: number;
 }
 
-@UseGuards(CallerGuard({ userSession: true }), CustomPermissionGuard)
+@UseGuards(
+  CallerGuard({
+    userSession: true,
+    apiKey: false,
+    oauthClient: false,
+    application: false,
+  }),
+  CustomPermissionGuard,
+)
 @CoreResolver(() => TimelineThreadsWithTotalDTO)
 @UseFilters(AuthGraphqlApiExceptionFilter)
 export class TimelineMessagingResolver {

@@ -20,7 +20,12 @@ import { SettingsPermissionGuard } from 'src/engine/guards/settings-permission.g
 @UsePipes(ResolverValidationPipe)
 @UseFilters(ApplicationExceptionFilter, AuthGraphqlApiExceptionFilter)
 @UseGuards(
-  CallerGuard({ userSession: { playground: false } }),
+  CallerGuard({
+    userSession: { playground: false },
+    apiKey: false,
+    oauthClient: false,
+    application: false,
+  }),
   SettingsPermissionGuard(PermissionFlagType.APPLICATIONS),
 )
 export class ApplicationCapabilityResolver {

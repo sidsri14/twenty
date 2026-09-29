@@ -43,7 +43,12 @@ export class ApplicationOAuthResolver {
 
   @Mutation(() => ApplicationTokenPairDTO)
   @UseGuards(
-    CallerGuard({ userSession: { playground: false } }),
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async renewApplicationToken(

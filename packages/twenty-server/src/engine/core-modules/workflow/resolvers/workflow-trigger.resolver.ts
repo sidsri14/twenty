@@ -101,6 +101,7 @@ export class WorkflowTriggerResolver {
   @UseGuards(
     CallerGuard({
       userSession: true,
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),

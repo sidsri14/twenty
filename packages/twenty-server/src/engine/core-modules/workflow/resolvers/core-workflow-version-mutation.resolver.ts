@@ -47,7 +47,12 @@ import { CoreWorkflowRunnerService } from 'src/modules/workflow/workflow-runner/
 @CoreResolver()
 @UsePipes(ResolverValidationPipe)
 @UseGuards(
-  CallerGuard({ userSession: true, oauthClient: true, application: true }),
+  CallerGuard({
+    userSession: true,
+    apiKey: false,
+    oauthClient: true,
+    application: true,
+  }),
   SettingsPermissionGuard(PermissionFlagType.WORKFLOWS),
 )
 @UseFilters(
@@ -108,6 +113,7 @@ export class CoreWorkflowVersionMutationResolver {
   @UseGuards(
     CallerGuard({
       userSession: true,
+      apiKey: false,
       oauthClient: { requireUser: true },
       application: { requireUser: true },
     }),

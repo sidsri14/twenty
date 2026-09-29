@@ -26,6 +26,7 @@ const MAX_PERMISSION_TARGETS = 100;
 @UseGuards(
   CallerGuard({
     userSession: true,
+    apiKey: false,
     oauthClient: { requireUser: true },
     application: { requireUser: true },
   }),

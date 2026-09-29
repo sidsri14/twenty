@@ -32,7 +32,12 @@ export class ApplicationAuthorizationResolver {
 
   @Query(() => [ApplicationAuthorizationDTO])
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async currentUserApplicationAuthorizations(
@@ -59,7 +64,12 @@ export class ApplicationAuthorizationResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(
-    CallerGuard({ userSession: { workspaceAgnostic: true } }),
+    CallerGuard({
+      userSession: { workspaceAgnostic: true },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async revokeApplicationAuthorization(

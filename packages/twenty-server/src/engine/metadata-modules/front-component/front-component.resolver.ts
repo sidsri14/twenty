@@ -133,7 +133,12 @@ export class FrontComponentResolver {
 
   @Query(() => FrontComponentDTO, { nullable: true })
   @UseGuards(
-    CallerGuard({ userSession: { playground: false } }),
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   async frontComponent(
@@ -177,7 +182,12 @@ export class FrontComponentResolver {
 
   @Mutation(() => ApplicationTokenPairDTO)
   @UseGuards(
-    CallerGuard({ userSession: { playground: false } }),
+    CallerGuard({
+      userSession: { playground: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     NoPermissionGuard,
   )
   @UseFilters(ApplicationExceptionFilter)

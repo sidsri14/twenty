@@ -451,7 +451,12 @@ export class ApplicationRegistrationResolver {
   }
 
   @UseGuards(
-    CallerGuard({ userSession: true }),
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     AdminPanelGuard,
     SettingsPermissionGuard(PermissionFlagType.APPLICATIONS),
   )
@@ -501,7 +506,12 @@ export class ApplicationRegistrationResolver {
   }
 
   @UseGuards(
-    CallerGuard({ userSession: true }),
+    CallerGuard({
+      userSession: true,
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
     SettingsPermissionGuard(PermissionFlagType.APPLICATIONS),
   )
   @Mutation(() => ApplicationRegistrationEntity)

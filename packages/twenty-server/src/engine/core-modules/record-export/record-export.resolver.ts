@@ -21,6 +21,7 @@ import { CallerGuard } from 'src/engine/guards/caller.guard';
 @UseGuards(
   CallerGuard({
     userSession: true,
+    apiKey: false,
     oauthClient: { requireUser: true },
     application: { requireUser: true },
   }),

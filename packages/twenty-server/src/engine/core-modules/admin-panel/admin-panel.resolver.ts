@@ -114,7 +114,12 @@ import { getAvailableEfforts } from 'src/engine/metadata-modules/ai/ai-models/ut
   ConfigVariableGraphqlApiExceptionFilter,
 )
 @UseGuards(
-  CallerGuard({ userSession: true }),
+  CallerGuard({
+    userSession: true,
+    apiKey: false,
+    oauthClient: false,
+    application: false,
+  }),
   SettingsPermissionGuard(PermissionFlagType.SECURITY),
 )
 export class AdminPanelResolver {
@@ -183,7 +188,12 @@ export class AdminPanelResolver {
 
   @UseGuards(
     AdminPanelGuard,
-    CallerGuard({ userSession: { impersonation: false } }),
+    CallerGuard({
+      userSession: { impersonation: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
   )
   @Query(() => [ServerAdminDTO])
   async getServerAdmins(): Promise<ServerAdminDTO[]> {
@@ -192,7 +202,12 @@ export class AdminPanelResolver {
 
   @UseGuards(
     AdminPanelGuard,
-    CallerGuard({ userSession: { impersonation: false } }),
+    CallerGuard({
+      userSession: { impersonation: false },
+      apiKey: false,
+      oauthClient: false,
+      application: false,
+    }),
   )
   @Mutation(() => ServerAdminDTO)
   async updateServerAdminAccess(
