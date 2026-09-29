@@ -8,6 +8,13 @@ const AUTH_GUARD_NAMES = [
 
 const CALLER_GUARD_NAME = 'CallerGuard';
 
+export const CALLER_KINDS = [
+  'userSession',
+  'apiKey',
+  'oauthClient',
+  'application',
+];
+
 export const REPLACED_CALLER_GUARD_NAMES = [
   'WorkspaceAuthGuard',
   'UserAuthGuard',
@@ -65,6 +72,16 @@ const isCallerGuardAcceptingNoCaller = (node: any): boolean =>
       property.value.type === 'Literal' && property.value.value === false,
   );
 
+const getMissingCallerKinds = (callerGuard: any): string[] => {
+  const declaredKeys = callerGuard.arguments[0].properties.map(
+    (property: any) => property.key.name ?? property.key.value,
+  );
+
+  return CALLER_KINDS.filter(
+    (callerKind) => !declaredKeys.includes(callerKind),
+  );
+};
+
 export const typedTokenHelpers = {
   nodeHasDecoratorsNamed: (node: any, decoratorNames: string[]): boolean => {
     if (!node.decorators) {
@@ -109,6 +126,17 @@ export const typedTokenHelpers = {
 
   getCallerGuardsAcceptingNoCaller: (node: any): any[] =>
     getUseGuardsArguments(node).filter(isCallerGuardAcceptingNoCaller),
+
+  getCallerGuardsMissingCallerKinds: (
+    node: any,
+  ): { callerGuard: any; missingCallerKinds: string[] }[] =>
+    getUseGuardsArguments(node)
+      .filter((arg: any) => isCallerGuardWithInlineConfig(arg))
+      .map((callerGuard: any) => ({
+        callerGuard,
+        missingCallerKinds: getMissingCallerKinds(callerGuard),
+      }))
+      .filter(({ missingCallerKinds }) => missingCallerKinds.length > 0),
 
   nodeHasPermissionsGuard: (node: any): boolean => {
     if (!node.decorators) {

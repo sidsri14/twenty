@@ -1,6 +1,9 @@
 import { RuleTester } from 'oxlint/plugins-dev';
 
-import { REPLACED_CALLER_GUARD_NAMES } from '../utils/typedTokenHelpers';
+import {
+  CALLER_KINDS,
+  REPLACED_CALLER_GUARD_NAMES,
+} from '../utils/typedTokenHelpers';
 import { rule, RULE_NAME } from './rest-api-methods-should-be-guarded';
 
 const ruleTester = new RuleTester();
@@ -11,7 +14,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Get()
-          @UseGuards(CallerGuard({ userSession: true }), NoPermissionGuard)
+          @UseGuards(CallerGuard({ userSession: true, apiKey: false, oauthClient: false, application: false }), NoPermissionGuard)
           testMethod() {}
         }
       `,
@@ -21,7 +24,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Get()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }), CustomPermissionGuard)
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }), CustomPermissionGuard)
           testMethod() {}
         }
       `,
@@ -49,7 +52,7 @@ ruleTester.run(RULE_NAME, rule, {
     },
     {
       code: `
-        @UseGuards(CallerGuard({ userSession: true }), NoPermissionGuard)
+        @UseGuards(CallerGuard({ userSession: true, apiKey: false, oauthClient: false, application: false }), NoPermissionGuard)
         class TestController {
           @Get()
           testMethod() {}
@@ -59,7 +62,7 @@ ruleTester.run(RULE_NAME, rule, {
     },
     {
       code: `
-        @UseGuards(CallerGuard({ userSession: true, apiKey: true }), CustomPermissionGuard)
+        @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }), CustomPermissionGuard)
         class TestController {
           @Get()
           testMethod() {}
@@ -81,7 +84,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Post()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }), CustomPermissionGuard)
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }), CustomPermissionGuard)
           createMethod() {}
         }
       `,
@@ -91,7 +94,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Put()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }), UpdatePermissionGuard)
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }), UpdatePermissionGuard)
           updateMethod() {}
         }
       `,
@@ -101,7 +104,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Patch()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }), NoPermissionGuard)
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }), NoPermissionGuard)
           patchMethod() {}
         }
       `,
@@ -111,7 +114,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Delete()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }), DeletePermissionGuard)
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }), DeletePermissionGuard)
           deleteMethod() {}
         }
       `,
@@ -119,7 +122,7 @@ ruleTester.run(RULE_NAME, rule, {
     },
     {
       code: `
-        @UseGuards(CallerGuard({ userSession: true, apiKey: true }), CustomPermissionGuard)
+        @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }), CustomPermissionGuard)
         class TestController {
           @Post()
           createMethod() {}
@@ -129,7 +132,7 @@ ruleTester.run(RULE_NAME, rule, {
     },
     {
       code: `
-        @UseGuards(CallerGuard({ userSession: true, apiKey: true }), SettingsPermissionGuard(PermissionFlagType.WORKSPACE))
+        @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }), SettingsPermissionGuard(PermissionFlagType.WORKSPACE))
         class TestController {
           @Delete()
           deleteMethod() {}
@@ -149,7 +152,7 @@ ruleTester.run(RULE_NAME, rule, {
         class TestController {
           @Post()
           @UseGuards(
-            CallerGuard({ userSession: { playground: false } }),
+            CallerGuard({ userSession: { playground: false }, apiKey: false, oauthClient: false, application: false }),
             SettingsPermissionGuard(PermissionFlagType.ROLES),
           )
           createMethod() {}
@@ -211,7 +214,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Get()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }))
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }))
           testMethod() {}
         }
       `,
@@ -254,7 +257,7 @@ ruleTester.run(RULE_NAME, rule, {
     },
     {
       code: `
-        @UseGuards(CallerGuard({ userSession: true, apiKey: true }))
+        @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }))
         class TestController {
           @Get()
           testMethod() {}
@@ -271,7 +274,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Post()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }))
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }))
           createMethod() {}
         }
       `,
@@ -286,7 +289,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Put()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }))
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }))
           updateMethod() {}
         }
       `,
@@ -301,7 +304,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Patch()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }))
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }))
           patchMethod() {}
         }
       `,
@@ -316,7 +319,7 @@ ruleTester.run(RULE_NAME, rule, {
       code: `
         class TestController {
           @Delete()
-          @UseGuards(CallerGuard({ userSession: true, apiKey: true }))
+          @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }))
           deleteMethod() {}
         }
       `,
@@ -329,7 +332,7 @@ ruleTester.run(RULE_NAME, rule, {
     },
     {
       code: `
-        @UseGuards(CallerGuard({ userSession: true, apiKey: true }))
+        @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }))
         class TestController {
           @Post()
           createMethod() {}
@@ -344,7 +347,7 @@ ruleTester.run(RULE_NAME, rule, {
     },
     {
       code: `
-        @UseGuards(CallerGuard({ userSession: true, apiKey: true }))
+        @UseGuards(CallerGuard({ userSession: true, apiKey: true, oauthClient: false, application: false }))
         class TestController {
           @Delete()
           deleteMethod() {}
@@ -390,7 +393,7 @@ ruleTester.run(RULE_NAME, rule, {
     },
     {
       code: `
-        @UseGuards(CallerGuard({ userSession: true }), NoPermissionGuard)
+        @UseGuards(CallerGuard({ userSession: true, apiKey: false, oauthClient: false, application: false }), NoPermissionGuard)
         class TestController {
           @Delete()
           @UseGuards(RequireAccessTokenGuard)
@@ -423,11 +426,79 @@ ruleTester.run(RULE_NAME, rule, {
       ],
       filename: 'test.tsx',
     })),
+    ...CALLER_KINDS.map((missingCallerKind) => {
+      const callerKindDeclarations = CALLER_KINDS.filter(
+        (callerKind) => callerKind !== missingCallerKind,
+      ).map((callerKind) => `${callerKind}: true`);
+
+      return {
+        code: `
+          class TestController {
+            @Get()
+            @UseGuards(
+              CallerGuard({ ${callerKindDeclarations.join(', ')} }),
+              NoPermissionGuard,
+            )
+            testMethod() {}
+          }
+        `,
+        errors: [
+          {
+            messageId: 'callerGuardConfigMissingCallerKind',
+            data: { missingCallerKinds: missingCallerKind },
+          },
+        ],
+        filename: 'test.tsx',
+      };
+    }),
+    {
+      code: `
+        @UseGuards(CallerGuard({ userSession: true }), NoPermissionGuard)
+        class TestController {
+          @Get()
+          testMethod() {}
+        }
+      `,
+      errors: [
+        {
+          messageId: 'callerGuardConfigMissingCallerKind',
+          data: { missingCallerKinds: 'apiKey, oauthClient, application' },
+        },
+      ],
+      filename: 'test.tsx',
+    },
     {
       code: `
         class TestController {
           @Get()
           @UseGuards(CallerGuard({}), NoPermissionGuard)
+          testMethod() {}
+        }
+      `,
+      errors: [
+        { messageId: 'callerGuardAcceptsNoCaller' },
+        {
+          messageId: 'callerGuardConfigMissingCallerKind',
+          data: {
+            missingCallerKinds: 'userSession, apiKey, oauthClient, application',
+          },
+        },
+      ],
+      filename: 'test.tsx',
+    },
+    {
+      code: `
+        class TestController {
+          @Get()
+          @UseGuards(
+            CallerGuard({
+              userSession: false,
+              apiKey: false,
+              oauthClient: false,
+              application: false,
+            }),
+            NoPermissionGuard,
+          )
           testMethod() {}
         }
       `,

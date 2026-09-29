@@ -1,6 +1,6 @@
 import { defineRule } from '@oxlint/plugins';
 
-import { typedTokenHelpers } from './typedTokenHelpers';
+import { CALLER_KINDS, typedTokenHelpers } from './typedTokenHelpers';
 
 type GuardedEndpointRuleOptions = {
   triggerDecorators: string[];
@@ -12,6 +12,8 @@ type GuardedEndpointRuleOptions = {
 const REPLACED_CALLER_GUARD_MESSAGE_ID = 'replacedCallerGuard';
 const CALLER_GUARD_CONFIG_NOT_INLINE_MESSAGE_ID = 'callerGuardConfigNotInline';
 const CALLER_GUARD_ACCEPTS_NO_CALLER_MESSAGE_ID = 'callerGuardAcceptsNoCaller';
+const CALLER_GUARD_CONFIG_MISSING_CALLER_KIND_MESSAGE_ID =
+  'callerGuardConfigMissingCallerKind';
 
 const findClassDeclaration = (node: any): any | null => {
   if (node.type === 'ClassDeclaration') return node;
@@ -58,6 +60,7 @@ export const createGuardedEndpointRule = ({
           'CallerGuard takes an inline object literal (no variable, no spread) so the accepted callers can be read at the endpoint.',
         [CALLER_GUARD_ACCEPTS_NO_CALLER_MESSAGE_ID]:
           'CallerGuard refuses every caller: accept at least one caller kind.',
+        [CALLER_GUARD_CONFIG_MISSING_CALLER_KIND_MESSAGE_ID]: `CallerGuard must declare every caller kind (${CALLER_KINDS.join(', ')}). Missing: {{ missingCallerKinds }}. Write false for a caller kind this endpoint refuses.`,
       },
       schema: [],
       hasSuggestions: false,
@@ -88,6 +91,17 @@ export const createGuardedEndpointRule = ({
           context.report({
             node: guard,
             messageId: CALLER_GUARD_ACCEPTS_NO_CALLER_MESSAGE_ID,
+          });
+        }
+
+        for (const {
+          callerGuard,
+          missingCallerKinds,
+        } of typedTokenHelpers.getCallerGuardsMissingCallerKinds(node)) {
+          context.report({
+            node: callerGuard,
+            messageId: CALLER_GUARD_CONFIG_MISSING_CALLER_KIND_MESSAGE_ID,
+            data: { missingCallerKinds: missingCallerKinds.join(', ') },
           });
         }
       };
